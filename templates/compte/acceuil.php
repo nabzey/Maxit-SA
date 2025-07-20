@@ -200,31 +200,52 @@
                     </button>
 
                     <div class="dropdown-menu absolute right-0 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-xl z-20 hidden border">
-                        <!-- Bouton fermer pour mobile -->
-                        <div class="md:hidden flex justify-between items-center p-4 border-b">
-                            <h3 class="text-lg font-semibold">Mon Compte</h3>
-                            <button onclick="closeDropdown()" class="text-gray-500 hover:text-gray-700">
-                                <i class="fa-solid fa-times text-xl"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="px-4 md:px-6 py-3 md:py-4 text-sm md:text-base text-gray-700 border-b border-gray-200">
-                            <div class="flex items-center gap-2 md:gap-3 mb-2">
-                                <i class="fa-solid fa-user text-maxit text-base md:text-lg"></i>
-                                <span class="font-semibold">Compte Principal</span>
-                            </div>
-                        </div>
-                        
-                        <button onclick="openModal()" class="w-full flex items-center gap-2 md:gap-3 px-4 md:px-6 py-3 md:py-4 text-sm md:text-base text-gray-700 hover:bg-gray-50 transition-colors">
-                            <i class="fa-solid fa-plus text-maxit"></i>
-                            Créer un compte secondaire
-                        </button>
-                        
-                        <a href="/logout" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-3 md:py-4 text-sm md:text-base text-red-600 hover:bg-red-50 transition-colors border-t border-gray-200">
-                            <i class="fa-solid fa-sign-out-alt text-red-600"></i>
-                            Déconnexion
-                        </a>
-                    </div>
+
+    <!-- Bouton fermer pour mobile -->
+    <div class="md:hidden flex justify-between items-center p-4 border-b">
+        <h3 class="text-lg font-semibold">Mon Compte</h3>
+        <button onclick="closeDropdown()" class="text-gray-500 hover:text-gray-700">
+            <i class="fa-solid fa-times text-xl"></i>
+        </button>
+    </div>
+
+    <div class="px-4 md:px-6 py-3 md:py-4 text-sm md:text-base text-gray-700 border-b border-gray-200">
+        <div class="flex items-center gap-2 md:gap-3 mb-2">
+            <i class="fa-solid fa-user text-maxit text-base md:text-lg"></i>
+            <span class="font-semibold">Compte Principal</span>
+        </div>
+    </div>
+
+    <!-- ✅ Section ajoutée pour afficher les comptes existants -->
+    <div class="px-4 md:px-6 py-3 md:py-4 border-b border-gray-200">
+        <form method="POST" action="/activer-compte">
+            <label for="compte_id" class="text-gray-600 text-sm mb-2 block">Choisissez un compte :</label>
+            <select name="compte_id" id="compte_id" class="w-full p-2 border rounded">
+                <?php if (!empty($comptes)): ?>
+                    <?php foreach ($comptes as $compte): ?>
+                        <option value="<?= $compte['id'] ?>">
+                            <?= $compte['type'] ?> - <?= $compte['telephone'] ?> (<?= number_format($compte['solde'], 0, ',', ' ') ?> FCFA)
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
+            <button type="submit" class="mt-3 w-full bg-maxit text-white py-2 rounded hover:bg-opacity-90 transition">
+                🎯 Définir comme compte principal
+            </button>
+        </form>
+    </div>
+
+    <button onclick="openModal()" class="w-full flex items-center gap-2 md:gap-3 px-4 md:px-6 py-3 md:py-4 text-sm md:text-base text-gray-700 hover:bg-gray-50 transition-colors">
+        <i class="fa-solid fa-plus text-maxit"></i>
+        Créer un compte secondaire
+    </button>
+
+    <a href="/logout" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-3 md:py-4 text-sm md:text-base text-red-600 hover:bg-red-50 transition-colors border-t border-gray-200">
+        <i class="fa-solid fa-sign-out-alt text-red-600"></i>
+        Déconnexion
+    </a>
+</div>
+
                 </div>
                 
                 <!-- Actions droite -->

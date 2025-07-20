@@ -37,48 +37,6 @@ class PersonneRepository extends AbstractRepository{
         return null;
     }
     
-    // var_dump($result);
-    //            die();
-// public function save(Personne $personne){
-//     try {
-//         $sql = "INSERT INTO personne (
-//                     nom, prenom, adresse, telephone, photorecto, photoverso, numeroCni, login, password, type
-//                 ) VALUES (
-//                     :nom, :prenom, :adresse, :telephone, :photorecto, :photoverso, :numeroCNi, :login, :password, :type
-//                 )";
-
-//         $stmt = $this->pdo->prepare($sql);
-
-//         $data = $stmt->execute([
-//             ':nom'         => $personne->getNom(),
-//             ':prenom'      => $personne->getPrenom(),
-//             ':adresse'     => $personne->getAdresse(),
-//             ':telephone'   => $personne->getTelephone(),
-//             ':photorecto'  => $personne->getPhotorecto(),
-//             ':photoverso'  => $personne->getPhotoverso(),
-//             ':numeroCni'   => $personne->getNumeroCni(),  
-//             ':login'       => $personne->getLogin(),
-//             ':password'    => $personne->getMotdepasse(),
-//             ':type'        => $personne->getTypepersonne()
-//         ]);
-
-//         if (!$data) {
-//             $errorInfo = $stmt->errorInfo();
-//             throw new \Exception('Erreur lors de l\'insertion de la personne : ' . implode(' - ', $errorInfo));
-//         }
-
-//         $lastId = $this->pdo->lastInsertId();
-//         if ($lastId) {
-//             $personne->setId($lastId);
-//             return $personne;
-//         } else {
-//             throw new \Exception('Impossible de récupérer l\'ID de la personne insérée');
-//         }
-
-//     } catch (\PDOException $e) {
-//         throw new \Exception('Erreur PDO lors de l\'insertion de la personne : ' . $e->getMessage());
-//     }
-// }
 
 public function insertPersonne(Personne $personne): int|false
     {

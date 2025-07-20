@@ -21,59 +21,6 @@ class PersonneService{
     public function findPersonne(string $login, string $password) {
         return $this->personneRepository->login($login, $password); 
     }
-// public function enregistrer(Personne $personne, $compte) {
-//      var_dump($personne);
-//     try {
-//         $this->pdo->beginTransaction();
-//         $personneCree = $this->personneRepository->selectById($personne->getId());
-
-//         if (!$personneCree || !method_exists($personneCree, 'getId') || $personneCree->getId() <= 0) {
-//             $errorInfo = $this->pdo->errorInfo();
-//             $this->pdo->rollBack();
-//             echo '<pre style="color:red">Erreur PDO Personne : ' . print_r($errorInfo, true) . '</pre>';
-//             return ['errors' => ['global' => ['Erreur lors de la création de la personne.']]];
-//         }
-        
-//         $compte->setPersonneId($personneCree->getId());
-//         $compte->setNumerotelephone($personneCree->getTelephone());
-        
-//         // DEBUG : Vérifiez les valeurs avant saveCompte
-//         echo '<pre style="color:blue">DEBUG - PersonneId : ' . $compte->getPersonneId() . '</pre>';
-//         echo '<pre style="color:blue">DEBUG - Telephone : ' . $compte->getNumerotelephone() . '</pre>';
-        
-//         $compteIdResult = $this->compteRepository->saveCompte($compte);
-//         echo '<pre style="color:blue">DEBUG - Résultat saveCompte : ' . print_r($compteIdResult, true) . '</pre>';
-        
-//         $compteId = $compteIdResult && isset($compteIdResult['id']) ? $compteIdResult['id'] : 0;
-        
-//         if ($compteId <= 0) {
-//             $errorInfo = $this->pdo->errorInfo();
-//             $this->pdo->rollBack();
-//             echo '<pre style="color:red">Erreur PDO Compte : ' . print_r($errorInfo, true) . '</pre>';
-//             return ['errors' => ['global' => ['Erreur lors de la création du compte.']]];
-//         }
-        
-//         $compte->setId($compteId);
-//         $this->pdo->commit();
-        
-//         echo '<pre style="color:green">SUCCESS - Compte créé avec ID : ' . $compteId . '</pre>';
-        
-//         return [
-//             'personne' => $personneCree,
-//             'compte' => $compte
-//         ];
-        
-//     } catch (\Exception $e) {
-//         $this->pdo->rollBack();
-//         echo '<pre style="color:red">Exception : ' . $e->getMessage() . '</pre>';
-//         return ['errors' => ['global' => [$e->getMessage()]]];
-//     }
-// }
-    /**
-     * Enregistre une personne et son compte, gère l'upload des fichiers
-     * @param array $data
-     * @return array
-     */
     public function enregistrerPersonne(array $data): array {
         $uploadDir = 'public/images/upload/';
         $rectoPath = '';
