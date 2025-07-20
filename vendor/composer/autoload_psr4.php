@@ -14,8 +14,9 @@ return array(
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),
     'App\\Service\\' => array($baseDir . '/src/service'),
     'App\\Repository\\' => array($baseDir . '/src/repository'),
-    'App\\Entity\\' => array($baseDir . '/src/entity'),
-    'App\\Core\\Abstract\\' => array($baseDir . '/app/core/abstract'),
+    'App\\Entity\\' => array($baseDir . '/src/Entity'),
+    'App\\Core\\Abstract\\' => array($baseDir . '/app/core/Abstract'),
     'App\\Core\\' => array($baseDir . '/app/core'),
     'App\\Controller\\' => array($baseDir . '/src/controller'),
+    'App\\Config\\' => array($baseDir . '/app/config'),
 );

@@ -1,6 +1,6 @@
 <?php return array(
     'root' => array(
-        'name' => 'zeynab/maxit-sa',
+        'name' => 'zeynab/projet-maxit',
         'pretty_version' => '1.0.0+no-version-set',
         'version' => '1.0.0.0',
         'reference' => null,
@@ -64,7 +64,7 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'zeynab/maxit-sa' => array(
+        'zeynab/projet-maxit' => array(
             'pretty_version' => '1.0.0+no-version-set',
             'version' => '1.0.0.0',
             'reference' => null,

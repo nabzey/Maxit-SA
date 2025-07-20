@@ -1,14 +1,14 @@
 {
-    "name": "zeynab/maxit-sa",
+    "name": "zeynab/projet-maxit",
     "autoload": {
         "psr-4": {
-            "App\\Entity\\": "src/entity",
+            "App\\Entity\\": "src/Entity",
+            "App\\Core\\": "app/core",
+            "App\\Controller\\": "src/controller",
             "App\\Repository\\": "src/repository",
             "App\\Service\\": "src/service",
-            "App\\Controller\\": "src/controller",
-             "App\\Core\\": "app/core",
-             "App\\Core\\Abstract\\": "app/core/abstract/"
-
+            "App\\Core\\Abstract\\": "app/core/Abstract",
+            "App\\Config\\":"app/config/"
         }
     },
     "authors": [

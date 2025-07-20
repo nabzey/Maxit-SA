@@ -13,17 +13,16 @@ class Database {
 
     public static function getInstance(): PDO {
         if (self::$instance === null) {
-            // Charger la configuration depuis config/database.php
-        (   self::$config = require_once __DIR__ . '/../config/database.php');
-        
+            self::$config = require dirname(__DIR__) . '/config/database.php';
             try {
-                $dsn = "pgsql:host=" . self::$config['host'] .";dbname=" . self::$config['dbname'];
+                $dsn = "pgsql:host=" . self::$config['host'] .
+                       ";dbname=" . self::$config['dbname'];
                 if (!empty(self::$config['charset'])) {
                     $dsn .= ";options='--client_encoding=" . self::$config['charset'] . "'";
                 }
                 self::$instance = new PDO(
                     $dsn,
-                    self::$config['user'],
+                    self::$config['username'],
                     self::$config['password'],
                     self::$config['options'] ?? []
                 );

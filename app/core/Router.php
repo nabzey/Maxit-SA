@@ -1,54 +1,64 @@
-<?php 
+<?php
 
 namespace App\Core;
 
+
 class Router {
-    private static array $routes = [];
+   
+public static function resolvePath(){
+    require_once dirname(__DIR__, 2) . '/app/config/env.php';
+    // require_once dirname(__DIR__, 2) . '/app/config/middlewares.php';
+    require dirname(__DIR__, 2) . '/routes/route.web.php';
+    require_once __DIR__ . '/App.php';
+    // \app\core\App::initDependencies();
 
-    public static function get(string $uri, string $controller, string $action): void
-    {
-        self::$routes['GET'][$uri] = [
-            'controller' => $controller,
-            'action' => $action,
-        ];
-    }
 
-    public static function post(string $uri, string $controller, string $action): void
-    {
-        self::$routes['POST'][$uri] = [
-            'controller' => $controller,
-            'action' => $action,
-        ];
-    }
-  public static function resolve(): void {
-    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
-    $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';  
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // On ne garde que le chemin
+    $uri = rtrim($uri, '/');
+    if ($uri === '') $uri = '/';
+
     
-    if (substr($uri, 0, 1) !== '/') {
-        $uri = '/' . $uri;
-    }
-    $uri = preg_replace('#/+#', '/', $uri);
-    
-    if (isset(self::$routes[$method][$uri])) {  
-        $route = self::$routes[$method][$uri]; 
-        
-        if (isset($route['controller'], $route['action'])) {
-            $controllerName = $route['controller'];
-            $action = $route['action'];
-            if (class_exists($controllerName)) {
-                $controller = new $controllerName();
-                if (method_exists($controller, $action)) {
-                    $controller->$action();
-                    return;
-                }
-            }
+    $baseUrl = rtrim(APP_URL, '/');
+    $parsedUrl = parse_url($baseUrl);
+    $hasPort = isset($parsedUrl['port']);
+    $port = (!$hasPort && defined('APP_PORT') && APP_PORT) ? ':' . APP_PORT : '';
+    $baseUrlWithPort = $baseUrl . $port;
+    $routeKey = $baseUrlWithPort . $uri;
+
+    // Gestion de la résolution de la route
+    if (isset($path[$routeKey])) {
+        $route = $path[$routeKey];
+        $controllerName = $route['controller'];
+        $action = $route['action'];
+        // Gestion des middlewares
+        // if (isset($route['middleware']) && is_array($route['middleware'])) {
+        //     foreach ($route['middleware'] as $middlewareKey) {
+        //         if (isset($middlewares[$middlewareKey])) {
+        //             $middlewareClass = $middlewares[$middlewareKey];
+        //             $middlewareInstance = new $middlewareClass();
+        //             // On accepte handle OU __invoke
+        //             if (method_exists($middlewareInstance, 'handle')) {
+        //                 $middlewareInstance->handle((object)['getUri' => function() use ($uri) { return $uri; }], function(){});
+        //             } elseif (is_callable($middlewareInstance)) {
+        //                 $middlewareInstance((object)['getUri' => function() use ($uri) { return $uri; }], function(){});
+        //             } else {
+        //                 throw new \Exception("Aucune méthode handle ou __invoke n'existe dans le middleware $middlewareClass");
+        //             }
+        //         }
+        //     }
+        // }
+        if (class_exists($controllerName) && method_exists($controllerName, $action)) {
+            $controller = new $controllerName();
+            $controller->$action();
+            return;
+        } else {
+            echo "Controller or action not found: '" . htmlspecialchars($controllerName) . "'::'" . htmlspecialchars($action) . "'";
+            return;
         }
+    } else {
+        http_response_code(404);
+        echo "Page non trouvée";
+        return;
     }
-    
-    http_response_code(404);
-    require_once '../templates/404.html.php';
 }
 }
-       
-
-
