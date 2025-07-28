@@ -113,58 +113,54 @@ try {
         ];
     } else {
         $pdo->exec("DO $$
-        BEGIN
-            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'typepersonne') THEN
-                CREATE TYPE typepersonne AS ENUM ('client', 'admin', 'commercial');
-            END IF;
-            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'typecompte') THEN
-                CREATE TYPE typecompte AS ENUM ('principal', 'secondaire');
-            END IF;
-            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'transaction_type') THEN
-                CREATE TYPE transaction_type AS ENUM ('depot', 'retrait', 'transfert');
-            END IF;
-        END$$;");
+       BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'typepersonne') THEN
+        CREATE TYPE typepersonne AS ENUM ('client', 'admin', 'commercial');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'typecompte') THEN
+        CREATE TYPE typecompte AS ENUM ('principal', 'secondaire');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'typetransaction') THEN
+        CREATE TYPE typetransaction AS ENUM ('DEPOT', 'RETRAIT', 'VIREMENT', 'TRANSFERT');
+    END IF;
+END $$;");
 
         $tables = [
             // Table personne
             "CREATE TABLE IF NOT EXISTS personne (
-                id SERIAL PRIMARY KEY,
-                nom VARCHAR(100) NOT NULL,
-                prenom VARCHAR(100) NOT NULL,
-                adresse VARCHAR(255),
-                telephone VARCHAR(20) UNIQUE,
-                numeroCni VARCHAR(20) UNIQUE,
-                typepersonne typepersonne NOT NULL,
-                login VARCHAR(100) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                photorecto VARCHAR(255),
-                photoverso VARCHAR(255)
+              id SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    telephone VARCHAR(20) UNIQUE,
+    adresse VARCHAR(255),
+    numerocni VARCHAR(20) UNIQUE,
+    typepersonne typepersonne NOT NULL,
+    login VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    photorecto VARCHAR(255),
+    photoverso VARCHAR(255)
             );",
             // Table compte
             "CREATE TABLE IF NOT EXISTS compte (
                 id SERIAL PRIMARY KEY,
-                numerotelephone VARCHAR(20) UNIQUE NOT NULL,
-                numerocni VARCHAR(20),
-                photorecto VARCHAR(255),
-                photoverso VARCHAR(255),
-                solde DOUBLE PRECISION DEFAULT 0,
-                estprincipale BOOLEAN DEFAULT false,
-                id_personne INTEGER NOT NULL,
-                typecompte typecompte NOT NULL,
-                FOREIGN KEY (id_personne) REFERENCES personne(id) ON DELETE CASCADE
+    numerotelephone VARCHAR(20) UNIQUE NOT NULL,
+    solde DOUBLE PRECISION DEFAULT 0,
+    typecompte typecompte NOT NULL,
+    id_personne INTEGER NOT NULL,
+    date_ouverture DATE DEFAULT CURRENT_DATE,
+    statut VARCHAR(20) DEFAULT 'ACTIF',
+    FOREIGN KEY (id_personne) REFERENCES personne(id) ON DELETE CASCADE
             );",
             // Table transaction
             "CREATE TABLE IF NOT EXISTS transaction (
-                id SERIAL PRIMARY KEY,
-                date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                montant DOUBLE PRECISION NOT NULL,
-                numcomptedepot INTEGER,
-                numcomptedestinataire INTEGER,
-                type transaction_type NOT NULL,
-                id_compte INTEGER NOT NULL,
-                FOREIGN KEY (id_compte) REFERENCES compte(id) ON DELETE CASCADE,
-                FOREIGN KEY (numcomptedepot) REFERENCES compte(id),
-                FOREIGN KEY (numcomptedestinataire) REFERENCES compte(id)
+                   id SERIAL PRIMARY KEY,
+    montant DOUBLE PRECISION NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id_compte INTEGER NOT NULL,
+    typetransaction typetransaction NOT NULL,
+    FOREIGN KEY (id_compte) REFERENCES compte(id) ON DELETE CASCADE
             );"
         ];
     }

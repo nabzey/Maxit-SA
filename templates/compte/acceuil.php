@@ -223,10 +223,13 @@
             <select name="compte_id" id="compte_id" class="w-full p-2 border rounded">
                 <?php if (!empty($comptes)): ?>
                     <?php foreach ($comptes as $compte): ?>
-                        <option value="<?= $compte['id'] ?>">
-                            <?= $compte['type'] ?> - <?= $compte['telephone'] ?> (<?= number_format($compte['solde'], 0, ',', ' ') ?> FCFA)
+                        <option value="<?= $compte['id'] ?>" <?= ($compte['estprincipale'] ? 'selected' : '') ?>>
+                            <?= strtoupper($compte['typecompte']) ?> - <?= $compte['numerotelephone'] ?> (<?= number_format($compte['solde'], 0, ',', ' ') ?> FCFA)
+                            <?= ($compte['estprincipale'] ? ' ★' : '') ?>
                         </option>
                     <?php endforeach; ?>
+                <?php else: ?>
+                    <option value="">Aucun compte disponible</option>
                 <?php endif; ?>
             </select>
             <button type="submit" class="mt-3 w-full bg-maxit text-white py-2 rounded hover:bg-opacity-90 transition">

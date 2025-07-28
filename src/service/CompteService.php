@@ -40,5 +40,19 @@ public function getComptesByPersonneId($personneId) {
         return $this->compteRepository->getComptesByPersonneId($personneId);
     }
 
+    /**
+     * Change le compte principal d'un utilisateur
+     */
+    public function changerComptePrincipal($personneId, $nouveauCompteId): bool {
+        return $this->compteRepository->changerComptePrincipal($personneId, $nouveauCompteId);
+    }
+
+    /**
+     * Récupère le solde du compte principal seulement
+     */
+    public function getSoldeComptePrincipal($personneId): float {
+        return $this->compteRepository->getSoldeComptePrincipal($personneId);
+    }
+
 
 }

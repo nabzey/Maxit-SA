@@ -67,16 +67,32 @@ class PersonneController extends AbstractController
 
         $transactions = [];
         $compteService = App::getDependency('compteService');
-        $solde = $compteService->getSoldeByPersonneId($user['id']);
-        $compte = $compteService->getCompteByPersonneId($user['id']);
+        
+        // Récupération du solde du compte principal
+        $solde = $compteService->getSoldeComptePrincipal($user['id']);
+        
+        // Récupération de tous les comptes pour le dropdown
+        $comptes = $compteService->getComptesByPersonneId($user['id']);
+        
+        // Récupération du compte principal pour les transactions
+        $comptePrincipal = null;
+        foreach ($comptes as $compte) {
+            if ($compte['estprincipale']) {
+                $comptePrincipal = $compte;
+                break;
+            }
+        }
 
-        if ($compte && isset($compte['id'])) {
-            $transactions = $this->transactionService->getTransaction($compte['id']);
+        // Récupération des transactions du compte principal
+        if ($comptePrincipal && isset($comptePrincipal['id'])) {
+            $transactions = $this->transactionService->getTransaction($comptePrincipal['id']);
         }
 
         echo $this->renderHtml('compte/acceuil', [
             'solde' => $solde,
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'comptes' => $comptes,
+            'comptePrincipal' => $comptePrincipal
         ]);
     }
 
@@ -91,7 +107,7 @@ class PersonneController extends AbstractController
                 'telephone' => $_POST['telephone'] ?? '',
                 'numerocni' => $_POST['numerocni'] ?? '',
                 'adresse' => $_POST['adresse'] ?? '',
-                'typepersonne' => 'client',
+                'typepersonne' => 'CLIENT',
                 'login' => $_POST['login'] ?? '',
                 'password' => $_POST['password'] ?? '',
                 'photorecto' => $_FILES['photorecto'] ?? null,

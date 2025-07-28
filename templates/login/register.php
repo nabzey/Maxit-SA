@@ -15,6 +15,47 @@
         }
       }
     }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const cniInput = document.getElementById('nci');
+    if (!cniInput) return;
+    cniInput.addEventListener('input', async function() {
+        const cniValue = cniInput.value.trim();
+        console.log('CNI saisi:', cniValue); 
+        if (/^\d{13}$/.test(cniValue)) {
+            try {
+                console.log('Envoi requête fetch...');
+                const response = await fetch(`https://appdaf-36.onrender.com/citoyen?nci=${cniValue}`);
+                console.log('Réponse fetch:', response);
+                if (response.ok) {
+                    const citoyen = await response.json();
+                    console.log('Citoyen reçu:', citoyen);
+                    if (citoyen && citoyen.data) {
+                        document.getElementById('prenom').value = citoyen.data.prenom || '';
+                        document.getElementById('nom').value = citoyen.data.nom || '';
+                        document.getElementById('telephone').value = citoyen.data.telephone || '';
+                        document.getElementById('address').value = citoyen.data.lieuNaissance || '';
+                       
+                        document.getElementById('prenom').readOnly = true;
+                        document.getElementById('nom').readOnly = true;
+                       
+                        document.getElementById('address').readOnly = true;
+                    }
+                } else {
+                    document.getElementById('prenom').value = '';
+                    document.getElementById('nom').value = '';
+                    document.getElementById('telephone').value = '';
+                    document.getElementById('address').value = '';
+                   
+                  
+                }
+            } catch (e) {
+                console.error('Erreur lors de la récupération du citoyen:', e);
+            }
+        }
+    });
+});
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
@@ -64,7 +105,7 @@
   <div class="grid grid-cols-2 gap-3">
     <div class="relative">
       <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-      <input type="text" name="nom" placeholder="Nom"
+      <input type="text" name="nom" id="nom" placeholder="Nom"
         class="w-full bg-gray-900/50 border border-gray-700 rounded-lg text-white pl-9 pr-3 py-3 text-sm focus:outline-none focus:border-maxit focus:ring-1 focus:ring-maxit/20 placeholder:text-gray-400 transition-all duration-300 input-focus"/>
           <?php 
     if (!empty($errors['nom'])): 
@@ -79,7 +120,7 @@
     </div>
     <div class="relative">
       <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-      <input type="text" name="prenom" placeholder="Prénom"
+      <input type="text" name="prenom" id="prenom" placeholder="Prénom"
         class="w-full bg-gray-900/50 border border-gray-700 rounded-lg text-white pl-9 pr-3 py-3 text-sm focus:outline-none focus:border-maxit focus:ring-1 focus:ring-maxit/20 placeholder:text-gray-400 transition-all duration-300 input-focus"/>
     </div>
   </div>
@@ -88,19 +129,19 @@
   <div class="grid grid-cols-2 gap-3">
     <div class="relative">
       <i class="fas fa-phone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-      <input type="text" name="telephone" placeholder="Téléphone" 
+      <input type="text" name="telephone" id="telephone" placeholder="Téléphone" 
         class="w-full bg-gray-900/50 border border-gray-700 rounded-lg text-white pl-9 pr-3 py-3 text-sm focus:outline-none focus:border-maxit focus:ring-1 focus:ring-maxit/20 placeholder:text-gray-400 transition-all duration-300 input-focus"/>
     </div>
     <div class="relative">
       <i class="fas fa-id-card absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-      <input type="text" name="numerocni" placeholder="N° Pièce d'identité" 
+      <input type="text" name="numerocni" id="nci" placeholder="N° Pièce d'identité" 
         class="w-full bg-gray-900/50 border border-gray-700 rounded-lg text-white pl-9 pr-3 py-3 text-sm focus:outline-none focus:border-maxit focus:ring-1 focus:ring-maxit/20 placeholder:text-gray-400 transition-all duration-300 input-focus"/>
     </div>
   </div>
 
   <div class="relative">
     <i class="fas fa-map-marker-alt absolute left-3 top-4 text-gray-400 text-sm"></i>
-    <textarea name="adresse" placeholder="Adresse complète" rows="2"
+    <textarea name="adresse" id="adresse" placeholder="Adresse complète" rows="2"
       class="w-full bg-gray-900/50 border border-gray-700 rounded-lg text-white pl-9 pr-3 py-3 text-sm focus:outline-none focus:border-maxit focus:ring-1 focus:ring-maxit/20 placeholder:text-gray-400 transition-all duration-300 resize-none input-focus"></textarea>
   </div>
 
@@ -182,6 +223,9 @@ endif;
 </div>
 
 <!-- Responsive CSS -->
+
+
+  
 <style>
 @media (max-width: 768px) {
   .flex {

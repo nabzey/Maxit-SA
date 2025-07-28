@@ -58,7 +58,7 @@ class PersonneService{
             $data['numerocni'] ?? '', // Correction ici
             $data['login'] ?? '',
             $data['password'] ?? '',
-            $data['typepersonne'] ?? '' // Correction ici
+            $data['typepersonne'] ?? 'CLIENT' // Correction ici
         );
         $compte = new \App\Entity\Compte(
             0,

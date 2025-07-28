@@ -17,7 +17,7 @@ class Personne extends AbstractEntity {
     private ?Compte $compteId=null;
     private string $typepersonne ;
 
-public function __construct($id=0, $nom='', $prenom='', $adresse='', $telephone='', $photorecto='', $photoverso='', $numerocni='', $login='', $password='', $typepersonne='client') {
+public function __construct($id=0, $nom='', $prenom='', $adresse='', $telephone='', $photorecto='', $photoverso='', $numerocni='', $login='', $password='', $typepersonne='CLIENT') {
         $this->id = $id;
         $this->nom = $nom;
         $this->prenom = $prenom;
@@ -29,7 +29,7 @@ public function __construct($id=0, $nom='', $prenom='', $adresse='', $telephone=
         $this->login = $login;
         $this->password = $password;
         $this->compteId = null;
-        $this->typepersonne = $typepersonne ?: 'client'; // Défaut client si vide
+        $this->typepersonne = $typepersonne ?: 'CLIENT'; // Défaut CLIENT si vide
     }
 
     public function getId(): int {
@@ -132,6 +132,30 @@ public function __construct($id=0, $nom='', $prenom='', $adresse='', $telephone=
     
     public function toJson(): string {
         return json_encode($this->toArray());
+    }
+
+    /**
+     * Vérifie si la personne est un client
+     */
+    public function isClient(): bool {
+        return $this->typepersonne === 'CLIENT';
+    }
+
+    /**
+     * Vérifie si la personne est du service commercial
+     */
+    public function isServiceCommercial(): bool {
+        return $this->typepersonne === 'SERVICECOMMERCIAL';
+    }
+
+    /**
+     * Vérifie si le client peut créer un compte (a toutes les infos nécessaires)
+     */
+    public function peutCreerCompte(): bool {
+        return !empty($this->nom) && !empty($this->prenom) && 
+               !empty($this->telephone) && !empty($this->numerocni) &&
+               !empty($this->adresse) && !empty($this->photorecto) &&
+               !empty($this->photoverso);
     }
   
 }
