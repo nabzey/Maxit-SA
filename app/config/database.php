@@ -2,11 +2,11 @@
 
 return [
     'driver' => 'pgsql',
-    'host' => $_ENV['DB_HOST'] ?? 'localhost',
-    'port' => 5433,
-    'dbname' => $_ENV['DB_NAME'] ?? 'projet-sa',
-    'user' => $_ENV['DB_USER'] ?? 'pguserDaf',
-    'password' => $_ENV['DB_PASSWORD'] ?? 'pgpassword',
+    'host' => $_ENV['DB_HOST'] ?? 'trolley.proxy.rlwy.net',
+    'port' => 49837,
+    'dbname' => $_ENV['DB_NAME'] ?? 'railway',
+    'user' => $_ENV['DB_USER'] ?? 'postgres',
+    'password' => $_ENV['DB_PASSWORD'] ?? 'XIZTLyhVomWBrburwbhfAEHzLQudImXa',
     'charset' => 'utf8',
     'options' => [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
